@@ -1,0 +1,38 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: fund-tracker-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: fund_tracker
+      MYSQL_USER: fund_user
+      MYSQL_PASSWORD: fund_pass
+      TZ: Asia/Shanghai
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: fund-tracker-backend
+    restart: always
+    depends_on:
+      - mysql
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/fund_tracker?useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&characterEncoding=utf8
+      SPRING_DATASOURCE_USERNAME: fund_user
+      SPRING_DATASOURCE_PASSWORD: fund_pass
+      JWT_SECRET: fund-tracker-jwt-secret-key-change-this-to-a-long-random-string
+      JWT_EXPIRATION: 86400000
+    ports:
+      - "8080:8080"
+
+volumes:
+  mysql_data:

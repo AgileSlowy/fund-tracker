@@ -2,7 +2,7 @@
   <section class="panel history-panel" :class="{ collapsed }">
     <div class="panel-head history-head">
       <div>
-        <h2>历史记录</h2>
+        <h2><span class="section-icon"><i class="ri-file-list-3-line"></i></span>历史记录</h2>
         <span class="record-count">{{ filteredRecords.length }} / {{ records.length }} 条</span>
       </div>
       <div class="history-tools">
